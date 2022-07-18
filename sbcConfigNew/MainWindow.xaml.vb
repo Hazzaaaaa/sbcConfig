@@ -4,8 +4,11 @@ Class MainWindow
     Public platform As String = ""
     Public desired As Integer = 0
     Public list() As Integer = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    Public squads() As Integer = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    Public counterP As Integer
     Public counter As Integer = 0
     Public p(100) As Integer
+    Public s(100) As Integer
     Public v(100) As Integer
     Public w(100) As String
     Public rTotal As Integer
@@ -15,14 +18,12 @@ Class MainWindow
     Private Sub cmbPlatform_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cmbPlatform.SelectionChanged
         If cmbPlatform.SelectedIndex = 0 Then
             platform = "pc"
-            Me.Background = Brushes.DarkOrange
         ElseIf cmbPlatform.SelectedIndex = 1 Then
             platform = "xbox"
-            Me.Background = Brushes.Green
         ElseIf cmbPlatform.SelectedIndex = 2 Then
             platform = "ps"
-            Me.Background = Brushes.SkyBlue
         End If
+        cmbPlatformP.SelectedIndex = cmbPlatform.SelectedIndex
     End Sub
     Private Sub btnRun_Click(sender As Object, e As RoutedEventArgs) Handles btnRun.Click
         Dim temp As String = txtNumber.Text
@@ -35,10 +36,10 @@ Class MainWindow
                 desired = temp2
                 check = True
             Else
-                MessageBox.Show("Rating must be between 81 and 99 inclusive.")
+                MessageBox.Show("Rating must be between 82 and 99 inclusive.")
             End If
         Else
-            MessageBox.Show("Inputted desired rating must be a number between 81 and 99 inclusive.")
+            MessageBox.Show("Inputted desired rating must be a number between 82 and 99 inclusive.")
         End If
         If platform = "" Then
             check = False
@@ -49,34 +50,9 @@ Class MainWindow
             MessageBox.Show("Enter a minimum of one rating.")
         End If
         If check = True Then
-            rTotal = 0
-            Dim lenth As Integer = counter
-            If lenth = 10 Then
-                Bruteforce1()
-            ElseIf lenth = 9 Then
-                Bruteforce2()
-            ElseIf lenth = 8 Then
-                bruteforce3()
-            ElseIf lenth = 7 Then
-                bruteforce4()
-            Else
-                priceseff()
-                ispricecall = True
-                Dim average As Decimal
-                While lenth < 7
-                    For i = 0 To lenth - 1
-                        average = average + list(i)
-                    Next
-                    average = average / lenth
-                    If average > (desired - 0.5) Then
-                        list(lenth) = ValueLow()
-                        lenth = lenth + 1
-                    Else
-                        list(lenth) = ValueHigh()
-                        lenth = lenth + 1
-                    End If
-                End While
-            End If
+            priceseff()
+            ispricecall = True
+            complete()
             bruteforce42()
         End If
     End Sub
@@ -400,16 +376,15 @@ Class MainWindow
         Dim additional As String = ""
         For i = counter To 6
             If i = 6 Then
-                additional &= list(counter)
+                additional &= list(i)
             Else
-                additional &= list(counter) & " & "
+                additional &= list(i) & " & "
             End If
         Next
 
         MessageBox.Show(cheapest(0, 0) & " & " & cheapest(1, 0) & " & " & cheapest(2, 0) & " & " & cheapest(3, 0) & " & " & additional & " which costs " & cheapest(4, 0) + rTotal & "
 " & cheapest(0, 1) & " & " & cheapest(1, 1) & " & " & cheapest(2, 1) & " & " & cheapest(3, 1) & " & " & additional & " which costs " & cheapest(4, 1) + rTotal & "
 " & cheapest(0, 2) & " & " & cheapest(1, 2) & " & " & cheapest(2, 2) & " & " & cheapest(3, 2) & " & " & additional & " which costs " & cheapest(4, 2) + rTotal)
-
     End Sub
     Function ValueLow()
         Dim highest As Integer = 0
@@ -426,7 +401,6 @@ Class MainWindow
                 highest = i
             End If
         Next
-        'WriteLine(highest & "highest")
         rTotal = rTotal + p(highest)
         Return highest
     End Function
@@ -445,7 +419,6 @@ Class MainWindow
             End If
             WriteLine("value: " & i & " = " & v(i))
         Next
-        'WriteLine(highest & "highest")
         rTotal = rTotal + p(highest)
         Return highest
     End Function
@@ -467,5 +440,166 @@ Class MainWindow
         step5 = (CInt(total)) / 11
         Dim step6 As Integer = Math.Truncate(step5)
         Return step6
+    End Function
+
+    Private Sub cmbPlatformP_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cmbPlatformP.SelectionChanged
+        If cmbPlatformP.SelectedIndex = 0 Then
+            platform = "pc"
+        ElseIf cmbPlatformP.SelectedIndex = 1 Then
+            platform = "xbox"
+        ElseIf cmbPlatformP.SelectedIndex = 2 Then
+            platform = "ps"
+        End If
+        cmbPlatform.SelectedIndex = cmbPlatformP.SelectedIndex
+
+    End Sub
+
+
+    Private Sub btnAddP_Click(sender As Object, e As RoutedEventArgs) Handles btnAddP.Click
+        Dim temp As String = txtAddP.Text
+        Dim temp2 As Integer
+        If IsNumeric(temp) Then
+            temp2 = temp
+            If (temp2 > 74 And temp2 < 94) Or temp2 = 1 Then
+                squads(counterP) = temp2
+                counterP += 1
+                txtAddP.Text = ""
+            ElseIf temp2 = 1 Then
+                squads(counterP) = temp2
+            Else
+                MessageBox.Show("Rating must be between 75 and 93 inclusive.")
+            End If
+        Else
+            MessageBox.Show("Inputted value must be a number between 75 and 93 inclusive.")
+        End If
+    End Sub
+    Private Sub btnCheckP_Click(sender As Object, e As RoutedEventArgs) Handles btnCheckP.Click
+        Dim message As String = ""
+        For i = 0 To counterP - 1
+            If i = counterP - 1 Then
+                message = message & squads(i)
+            Else
+                message = message & squads(i) & ", "
+            End If
+        Next
+        MessageBox.Show(message)
+    End Sub
+    Private Sub btnResetP_Click(sender As Object, e As RoutedEventArgs) Handles btnResetP.Click
+        For i = 0 To counterP - 1
+            squads(i) = 0
+        Next
+        counterP = 0
+    End Sub
+
+    Private Sub btnRunP_Click(sender As Object, e As RoutedEventArgs) Handles btnRunP.Click
+        Dim tempPrice As Integer
+        priceseff()
+        ispricecall = True
+        For i = 83 To 92
+            If i > 90 Then
+                list = {84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+                counter = 1
+                desired = i
+                complete()
+                tempPrice = bruteforce4Price()
+                s(i) = tempPrice
+            Else
+                list = {83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+                counter = 1
+                desired = i
+                complete()
+                tempPrice = bruteforce4Price()
+                s(i) = tempPrice
+            End If
+        Next
+        Dim displayPrice As Integer
+        For j = 0 To counterP
+            If squads(j) = 1 Then
+                displayPrice = displayPrice + 7000
+            Else
+                displayPrice = s(squads(j)) + displayPrice
+            End If
+        Next
+        Dim temp As String = ""
+        For i = 82 To 92
+            temp &= "
+ " & i & " = " & s(i)
+        Next
+        MessageBox.Show(temp)
+
+        MessageBox.Show(displayPrice)
+    End Sub
+    Sub complete()
+        rTotal = 0
+        Dim lenth As Integer = counter
+        If lenth = 10 Then
+            Bruteforce1()
+        ElseIf lenth = 9 Then
+            Bruteforce2()
+        ElseIf lenth = 8 Then
+            bruteforce3()
+        ElseIf lenth = 7 Then
+            bruteforce4()
+        Else
+            Dim average As Decimal
+            While lenth < 7
+                For i = 0 To lenth - 1
+                    average = average + list(i)
+                Next
+                average = average / lenth
+                If average > (desired - 0.5) Then
+                    list(lenth) = ValueLow()
+                    lenth = lenth + 1
+                Else
+                    list(lenth) = ValueHigh()
+                    lenth = lenth + 1
+                End If
+            End While
+        End If
+    End Sub
+    Function bruteforce4Price()
+        If Not ispricecall Then
+            priceseff()
+        End If
+        If Not (desired > 0) Then
+        End If
+        Dim cheapest(5) As Integer
+        cheapest(4) = 1000000000
+        Dim price As Integer
+        For g = min To max
+            list(7) = g
+            For h = min To max
+                list(8) = h
+                For i = min To max
+                    list(9) = i
+                    For j = min To max
+                        If (Not (i = j) Or w(j) = "**" Or w(j) = "***") And (Not (h = i) Or w(h) = "**" Or w(h) = "***") And (Not (h = j) Or w(h) = "**" Or w(h) = "***") And (Not (g = h) Or w(h) = "**" Or w(h) = "***") And (Not (g = i) Or w(i) = "**" Or w(i) = "***") And (Not (g = j) Or w(j) = "**" Or w(j) = "***") Then
+                            list(10) = j
+                            If calc() >= desired Then
+                                price = p(g) + p(h) + p(i) + p(j)
+                                If cheapest(4) > price Then
+                                    cheapest(0) = g
+                                    cheapest(1) = h
+                                    cheapest(2) = i
+                                    cheapest(3) = j
+                                    cheapest(4) = price
+                                    j = 99
+                                End If
+                            End If
+                        End If
+                    Next
+                Next
+            Next
+        Next
+        Dim additional As String = ""
+        For i = counter To 6
+            If i = 6 Then
+                additional &= list(i)
+            Else
+                additional &= list(i) & " & "
+            End If
+        Next
+        Dim total As Integer = cheapest(4) + rTotal
+        Return total
     End Function
 End Class
