@@ -400,16 +400,15 @@ Class MainWindow
         Dim additional As String = ""
         For i = counter To 6
             If i = 6 Then
-                additional &= list(counter)
+                additional &= list(i)
             Else
-                additional &= list(counter) & " & "
+                additional &= list(i) & " & "
             End If
         Next
 
         MessageBox.Show(cheapest(0, 0) & " & " & cheapest(1, 0) & " & " & cheapest(2, 0) & " & " & cheapest(3, 0) & " & " & additional & " which costs " & cheapest(4, 0) + rTotal & "
 " & cheapest(0, 1) & " & " & cheapest(1, 1) & " & " & cheapest(2, 1) & " & " & cheapest(3, 1) & " & " & additional & " which costs " & cheapest(4, 1) + rTotal & "
 " & cheapest(0, 2) & " & " & cheapest(1, 2) & " & " & cheapest(2, 2) & " & " & cheapest(3, 2) & " & " & additional & " which costs " & cheapest(4, 2) + rTotal)
-
     End Sub
     Function ValueLow()
         Dim highest As Integer = 0
@@ -426,7 +425,6 @@ Class MainWindow
                 highest = i
             End If
         Next
-        'WriteLine(highest & "highest")
         rTotal = rTotal + p(highest)
         Return highest
     End Function
@@ -445,7 +443,6 @@ Class MainWindow
             End If
             WriteLine("value: " & i & " = " & v(i))
         Next
-        'WriteLine(highest & "highest")
         rTotal = rTotal + p(highest)
         Return highest
     End Function
